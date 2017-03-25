@@ -8,14 +8,17 @@ int main()
 {
 	BSTree T;
 	AVL TB;
+	RBTree rb;
+	NodePoint rbHead=NULL;
 	NodePoint head = TB.getHead();
 	//srand(time(NULL));
 	for (int i = 0; i < 100; i++)
 	{
 		int temp = 100+rand() % 1000;
-		NodePoint p = new  Node{temp,NULL,NULL,NULL,0};
+		NodePoint p = new  Node{temp,NULL,NULL,NULL,0,BLACK};
 		T.addNode(p);
 		TB.addNode(head, NULL, temp);
+		rb.insertNode(rbHead, temp);
 		printf("%-8d", temp);
 	}
 	T.travers_BSTree(T.getHead());
@@ -28,6 +31,9 @@ int main()
 	printf("\n");
 	TB.travers_AVL(head);
 	printf("\n%d\n",head->height);
+	//ºìºÚÊ÷µÄ²åÈë
+	printf("red-black-tree:\n");
+	rb.travers_RBTree(rbHead);
     return 0;
 }
 

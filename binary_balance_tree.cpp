@@ -51,7 +51,7 @@ NodePoint AVL::addNode(NodePoint &p,NodePoint parent,int data)
 {
 	if (p == NULL)
 	{
-		p = new Node {data,NULL,NULL,parent,1};
+		p = new Node {data,NULL,NULL,parent,1,BLACK};
 	}
 	else
 	{

@@ -9,6 +9,11 @@
 #include "targetver.h"
 #include <stdio.h>
 #include <tchar.h>
+enum Color
+{
+	BLACK = 0,
+	RED=1
+};
 typedef struct Node
 {
 	int data;
@@ -16,12 +21,15 @@ typedef struct Node
 	struct Node* right;
 	struct Node* parent;
 	int height;
+	Color color ;
+
 }* NodePoint;
 enum DataType
 {
 	NUREPEAT = 1,
 	REPEAT = 0
 };
+
 //二叉搜索树类
 class BSTree
 {
@@ -63,6 +71,18 @@ public:
 	void travers_AVL(NodePoint head);
 	NodePoint getHead();
 	void adjust(NodePoint & parent);
+};
+class RBTree
+{
+private:
+	NodePoint head;
+public:
+	void insertNode(NodePoint &head, int data);
+	void deleteNode(NodePoint head, int data);
+	NodePoint leftRotate(NodePoint head);
+	NodePoint rightRotate(NodePoint head);
+	void travers_RBTree(NodePoint head);
+	NodePoint searchByVal(NodePoint head, int data);
 };
 #endif
 // TODO:  在此处引用程序需要的其他头文件
