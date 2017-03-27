@@ -78,11 +78,12 @@ private:
 	NodePoint head;
 public:
 	void insertNode(NodePoint &head, int data);
-	void deleteNode(NodePoint head, int data);
+	void deleteNode(NodePoint &head, int data);
 	NodePoint leftRotate(NodePoint head);
 	NodePoint rightRotate(NodePoint head);
 	void travers_RBTree(NodePoint head);
 	NodePoint searchByVal(NodePoint head, int data);
+	void doubleBlackAdjust(NodePoint head);
 };
 #endif
 // TODO:  在此处引用程序需要的其他头文件

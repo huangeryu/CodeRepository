@@ -12,7 +12,7 @@ int main()
 	NodePoint rbHead=NULL;
 	NodePoint head = TB.getHead();
 	//srand(time(NULL));
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		int temp = 100+rand() % 1000;
 		NodePoint p = new  Node{temp,NULL,NULL,NULL,0,BLACK};
@@ -33,6 +33,12 @@ int main()
 	printf("\n%d\n",head->height);
 	//ºìºÚÊ÷µÄ²åÈë
 	printf("red-black-tree:\n");
+	rb.travers_RBTree(rbHead);
+	//ºìºÚÊ÷µÄÉ¾³ý
+	printf("\ndelete:\n");
+	rb.deleteNode(rbHead, 567);
+	rb.deleteNode(rbHead,600);
+	rb.deleteNode(rbHead, 824);
 	rb.travers_RBTree(rbHead);
     return 0;
 }

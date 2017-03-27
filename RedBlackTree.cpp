@@ -247,6 +247,7 @@ void RBTree::deleteNode(NodePoint &head, int data)
 					{
 						repm=repm->left;
 					}
+					p->data=repm->data;
 					//repm节点没有左孩子节点，如果repm节点为红色，则repm节点为红色的叶子节点
 					if (repm->color == RED)
 					{
@@ -309,7 +310,7 @@ void RBTree::doubleBlackAdjust(NodePoint head)
 		if (brother->right != NULL)
 		{//情况四
 			leftRotate(brother);
-			brother->color = BLACK;
+			brother->right->color = BLACK;
 			parent->left = NULL;
 			delete head;
 			return;
