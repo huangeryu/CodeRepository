@@ -218,6 +218,7 @@ void OSTree::deleteNode(int data)
 		}
 	}
 }
+
 void OSTree::adjustBlack(NodePoint& p)
 {
 	NodePoint parent = p->parent;
@@ -282,5 +283,28 @@ void OSTree::adjustBlack(NodePoint& p)
 		parent->rightchild = NULL;
 		delete p;
 		p = parent;
+	}
+}
+int OSTree::getRank(int data)
+{
+	NodePoint p = searchNode(data);
+	if (p == NULL)return -1;
+	if (p->data != data)return 0;
+	int rank = p->leftchild->size+1;
+	while (p->parent!=NULL)
+	{
+		if (p == p->parent->rightchild)rank = p->parent->leftchild->size + 1 + rank;
+		p = p->parent;
+	}
+	return rank;
+}
+//让T指向树的根节点：
+void OSTree::linkHead()
+{
+	if (this->T == NULL)return;
+	if (this->T->parent == NULL)return;
+	while (this->T->parent != NULL)
+	{
+		this->T = this->T->parent;
 	}
 }
