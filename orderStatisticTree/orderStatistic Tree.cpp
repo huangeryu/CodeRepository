@@ -58,8 +58,9 @@ void OSTree::rightRatate(NodePoint p)
 //如果为树为空，返回null
 NodePoint OSTree::searchNode(int data)
 {
+	linkHead();
 	NodePoint p = T;
-	if (p = NULL)return NULL;
+	if (p == NULL)return NULL;
 	while (p->data != data)
 	{
 		if (p->data > data)
@@ -91,7 +92,7 @@ NodePoint OSTree::searchNode(int data)
 void OSTree::insertNode(int data)
 {
 	NodePoint parent = searchNode(data);
-	if(parent=NULL)
+	if(parent==NULL)
 	{
 		this->T = new Node(data,BLACK);
 		return;
@@ -142,6 +143,7 @@ void OSTree::insertNode(int data)
 				}
 				else
 				{
+					p->color = BLACK;
 					break;
 				}
 			}
@@ -171,6 +173,7 @@ void OSTree::insertNode(int data)
 				leftRatate(parent);
 			}
 		}
+
 	}
 }
 //删除节点操作
@@ -186,7 +189,7 @@ void OSTree::deleteNode(int data)
 			p->data=repNode->data;
 			p = repNode;
 		}
-		else if (p->leftchild == NULL)
+		if (p->leftchild == NULL)
 		{
 			if (p->color == Rad)
 			{//删除红色叶子节点
@@ -290,7 +293,15 @@ int OSTree::getRank(int data)
 	NodePoint p = searchNode(data);
 	if (p == NULL)return -1;
 	if (p->data != data)return 0;
-	int rank = p->leftchild->size+1;
+	int rank = 0;
+	if (p->leftchild != NULL)
+	{
+		rank = p->leftchild->size+1;
+	}
+	else
+	{
+		rank = 1;
+	}
 	while (p->parent!=NULL)
 	{
 		if (p == p->parent->rightchild)rank = p->parent->leftchild->size + 1 + rank;
@@ -307,4 +318,18 @@ void OSTree::linkHead()
 	{
 		this->T = this->T->parent;
 	}
+}
+void OSTree::travel_OSTree(NodePoint head)
+{
+	if (head != NULL)
+	{
+		travel_OSTree(head->leftchild);
+		cout << head->data << "  ";
+		travel_OSTree(head->rightchild);
+	}
+}
+NodePoint OSTree::getRoot()
+{
+	linkHead();
+	return this->T;
 }

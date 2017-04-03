@@ -41,6 +41,7 @@ public:
 	{
 		this->T = NULL;
 	}
+	NodePoint getRoot();
 	void insertNode(int data);
 	void deleteNode(int data);
 	NodePoint searchNode(int date);
@@ -50,6 +51,7 @@ public:
 	void leftRatate(NodePoint p);
 	void rightRatate(NodePoint p);
 	int getSize(NodePoint p);
+	void linkHead();
 };
 
 // TODO:  在此处引用程序需要的其他头文件
