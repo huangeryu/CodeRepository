@@ -9,6 +9,8 @@
 #include<iostream>
 #include <stdio.h>
 #include <tchar.h>
+#include<vector>
+using namespace std;
 class matrixChain
 {
 protected:
@@ -51,6 +53,26 @@ public:
 		delete price;
 	}
 };
-
-
+class lcs
+{
+private:
+	char* A=new char[8]{' ','A','B','C','B','D','A','B'};
+	char* B=new char[7]{' ','B','D','C','A','B','A'};
+	int* c;
+	int asize;
+	int bsize;
+public:
+	lcs()
+	{
+		this->asize =8;
+		this->bsize =7;
+		c = new int[56]{0};
+	}
+	void calculateTable();
+	void getSolution();
+	~lcs()
+	{
+		delete c;
+	}
+};
 // TODO:  在此处引用程序需要的其他头文件
