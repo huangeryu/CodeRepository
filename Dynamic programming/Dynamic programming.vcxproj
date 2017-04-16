@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dynamic programming.cpp" />
+    <ClCompile Include="knapsack.cpp" />
     <ClCompile Include="lcs.cpp" />
     <ClCompile Include="matrix_chain_multi.cpp" />
     <ClCompile Include="optimal BST.cpp" />

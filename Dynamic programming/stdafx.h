@@ -100,4 +100,20 @@ public:
 		delete w,c,index; 
 	}
 };
+class knapsack
+{
+private:
+	int size;
+	int capacity;
+	int * w=new int[size];
+	int * p=new int[size];
+	int *c=new int [size*capacity];
+public:
+	knapsack(int size,int capacity):size(size+1),capacity(capacity+1)
+	{
+		
+	}
+	void calculateTable();
+	void getSolution();
+};
 // TODO:  在此处引用程序需要的其他头文件
