@@ -41,5 +41,8 @@
     <ClCompile Include="lcs.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="optimal BST.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

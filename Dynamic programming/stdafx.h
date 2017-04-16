@@ -75,4 +75,29 @@ public:
 		delete c;
 	}
 };
+class OBST
+{
+private:
+	vector<double> p;
+	vector<double>q;
+	int size;
+	const double MAX = 1000000;
+	double *w=new double[size*size];
+	double *c=new double[size*size];
+	int *index=new int[size*size];
+public:
+	OBST(int size):size(size+1)
+	{
+		double a[] = {0,0.15,0.1,0.05,0.1,0.2};
+		double b[] = { 0.05,0.1,0.05,0.05,0.05,0.1 };
+		p.insert(p.begin(), a, a + 10);
+		q.insert(q.begin(), b, b + 10);
+	}
+	void calculateTable();
+	void getSolution(int from,int end);
+	~OBST()
+	{
+		delete w,c,index; 
+	}
+};
 // TODO:  在此处引用程序需要的其他头文件

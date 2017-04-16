@@ -152,6 +152,7 @@
     <ClCompile Include="Dynamic programming.cpp" />
     <ClCompile Include="lcs.cpp" />
     <ClCompile Include="matrix_chain_multi.cpp" />
+    <ClCompile Include="optimal BST.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
