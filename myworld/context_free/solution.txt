@@ -1,0 +1,16 @@
+1.expr->term R1
+R1-> + term {print '+'} R1
+   | - term {print '-'} R1
+   | O
+
+2.term->factor R2
+R2-> * factor {print '*'} R2
+   | / factor {print '/'} R2
+   | O
+
+3. factor-> (expr)
+	      | num {print num}
+
+
+----------------------------------------
+

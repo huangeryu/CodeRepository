@@ -1,0 +1,40 @@
+atomic token //原子对象
+BUFF cache	//目标buff
+#define n   //线程数目
+#define m	//每个线程写的字节数目
+int compare_and_exchange( volatile int* destination,int comparand,int new)
+{
+	asm
+	(
+		"lock cmpxchg %1,(%2) \n\t"
+		"jnz lab1\n\t"
+		"mov $0x1,%%eax\n\t"
+		"jmp lab2\n\t"
+		"lab1:\n\t"
+		"mov $0,%%eax"
+		"lab2:\n\t"
+		:
+		:"a"(comparand),"c"(new),"d"(destination)
+	);
+}
+void write(buff,size)
+{
+	int native_token=token;
+	int temp;
+	for(int i=0;i<size;i+=m)
+	{
+		temp=native_token+i*n;
+		new=temp+2;
+		if(token.test_and_swap(temp,new)) //注一
+		{
+			//拷贝m个字节
+			cache[native_token,...,native_token+m-1]=buff[temp,...,temp+m-1];
+		}
+		else yied;//放弃cpu
+	}
+}
+//注一:token.test_and_swap(temp,new) 如果token和temp相同则token=new,并返回true;
+//否则返回false
+//
+//
+
