@@ -10,6 +10,7 @@ def loadDataSet():
 
 def sigmoid(inx):
     return 1.0/(1+exp(-inx))
+
 '''
 def gradAscent(dataMatIn,classLabels):
     dataMatrix=mat(dataMatIn)
@@ -24,6 +25,7 @@ def gradAscent(dataMatIn,classLabels):
         weights=weights+alpha*dataMatrix.transpose()*error
     return weights
 '''
+
 def gradAscent(dataMatIn,classLabels):
     dataMatrix=mat(dataMatIn)
     labelMat=mat(classLabels).transpose()
