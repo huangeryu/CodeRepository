@@ -1,0 +1,19 @@
+#!/usr/bin/pyhton2.7
+import os
+def ispcyfile(fr,pattern='.pyc'):
+    if fr.endswith(pattern):
+        return True
+    else:
+		return False
+
+def deletefile(currentDir):
+    for fr in os.listdir(currentDir):
+        path=os.path.join(currentDir,fr)
+        if(os.path.isfile(path)):
+            if(ispcyfile(fr)):
+                os.remove(path)
+                print 'delete %s'%path
+        elif(not ispcyfile(fr,'.git')):
+            deletefile(path)
+
+deletefile('./')
