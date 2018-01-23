@@ -1,9 +1,9 @@
 from numpy import *
 def loadDataSet(fileName):
-    dataMat=[];labelMat=[]
-    fr=open(fileName)
+    dataMat = [];labelMat = []
+    fr = open(fileName)
     for line in fr.readlines():
-        lineArr=line.strip().split('\t')
+        lineArr = line.strip().split('\t')
         dataMat.append([float(lineArr[0]),float(lineArr[1])])
         labelMat.append(float(lineArr[2]))
     return dataMat,labelMat
@@ -103,7 +103,7 @@ class optStruct:
         self.eCache=mat(zeros((self.m,2)))
 
 def calcEk(oS,k):
-    fxk=float(multiply(oS.alphas,oS.labelMat).T*(oS.x*oS.x[k,:].T))+oS.b
+    fxk=float(multiply(oS.alphas,oS.labelMat).T*(oS.X*oS.X[k,:].T))+oS.b
     Ek=fxk-float(oS.labelMat[k])
     return Ek
 
@@ -121,7 +121,7 @@ def selectJ(i,oS,Ei):
         return maxK,Ej
     else:
         j=selectJrand(i,oS.m)
-        Ej=calcEk(oS.j)
+        Ej=calcEk(oS,j)
     return j,Ej
 
 def updateEk(oS,k):
@@ -139,43 +139,56 @@ def innerL(i,oS):
         else:
             L=max(0,oS.alphas[j]+oS.alphas[i]-oS.C)
             H=min(oS.C,oS.alphas[j]+oS.alphas[i])
-            if L==H:print "L=H";return 0
-            eta=2.0*oS.X[i,:]*oS.X[j,:].T-oS.X[i,:]*oS.X[i,:].T-oS.X[j,:]*oS.X[j,:].T
-            if eta>=0:print "eta>=0";return 0
-            oS.alphas[j]-=oS.labelMat[j]*(Ei-Ej)/eta
-            oS.alphas[j]=clipAlpha(oS.alphas[j],H,L)
-            updataEk(oS,j)
-            if(abs(oS.alphas[j]-alphaJold)<0.00001):
-                print "j not moving enough";return 0
-            oS.alphas[i]+=oS.labelMat[j]*oS.labelMat[i]*(alphaJold-oS.alphas[j])
-            updataEk(oS,i)
-            b1=oS.b-Ei-oS.labelMat[i]*(oS.alphas[i]-alphaIold)*oS.X[i,:]*oS.X[i,:].T-oS.labelMat[j]*(oS.alphas[j]-alphaJold)*oS.X[i,:]*oS.X[j,:].T
-            b2=oS.b-Ei-oS.labelMat[i]*(oS.alphas[i]-alphaIold)*oS.X[i,:]*oS.X[j,:].T-oS.labelMat[j]*(oS.alphas[j]-alphaJold)*oS.X[j,:]*oS.X[j,:].T
-            if(0<oS.alphas[i])and(oS.C>oS.alphas[i]):oS.b=b1
-            elif (0<oS.alphas[j])and(oS.C>oS.alphas[j]):oS.b=b2
-            else: oS.b=(b1+b2)/2
-            return 1
+        if L==H:print "L=H";return 0
+        eta=2.0*oS.X[i,:]*oS.X[j,:].T-oS.X[i,:]*oS.X[i,:].T-oS.X[j,:]*oS.X[j,:].T
+        if eta>=0:print "eta>=0";return 0
+        oS.alphas[j]-=oS.labelMat[j]*(Ei-Ej)/eta
+        oS.alphas[j]=clipAlpha(oS.alphas[j],H,L)
+        updateEk(oS,j)
+        if(abs(oS.alphas[j]-alphaJold)<0.00001):
+            print "j not moving enough";return 0
+        oS.alphas[i]+=oS.labelMat[j]*oS.labelMat[i]*(alphaJold-oS.alphas[j])
+        updateEk(oS,i)
+        b1=oS.b-Ei-oS.labelMat[i]*(oS.alphas[i]-alphaIold)*oS.X[i,:]*oS.X[i,:].T-oS.labelMat[j]*(oS.alphas[j]-alphaJold)*oS.X[i,:]*oS.X[j,:].T
+        b2=oS.b-Ei-oS.labelMat[i]*(oS.alphas[i]-alphaIold)*oS.X[i,:]*oS.X[j,:].T-oS.labelMat[j]*(oS.alphas[j]-alphaJold)*oS.X[j,:]*oS.X[j,:].T
+        if(0<oS.alphas[i])and(oS.C>oS.alphas[i]):oS.b=b1
+        elif (0<oS.alphas[j])and(oS.C>oS.alphas[j]):oS.b=b2
+        else: oS.b=(b1+b2)/2
+        return 1
     else:return 0
 
-    def smoP(dataMatIn,classLabels,C,toler,maxIter,kTup=('lin',0)):
-        oS=optStruct(mat(dataMatIn),mat(classLabels).transpose(),C,toler)
-        iter=0
-        entireSet=True;alphaPairsChange=0
-        while(iter<maxIter)and ((alphaPairsChange>0)or(entireSet)):
-            alphaPairsChange=0
-            if entireSet:
-                for i in range(oS.m):
-                    alphaPairsChange+=innerL(i,oS)
-                print "fullSet,iter:%d i:%d,pairs changed %d"%(iter,i,alphaPairsChange)
-                iter+=1
-            else:
-                nonBoundIs=nonzero((oS.alphas.A>0)*(oS.alphas.A<C))[0]
-                for i in nonBoundIs:
-                    alphaPairsChange+=innerL(i,oS)
-                    print "non-bound,iter:%d i:%d,pairs changed %d"%(iter,i,alphaPairsChange)
-                iter+=1
-                if entireSet:entireSet=False
-                elif (alphaPairsChange==0):
-                    entireSet=True
-                print "iteration number:%d"%iter
-        return oS.b,oS.alphas
+def smoP(dataMatIn,classLabels,C,toler,maxIter,kTup=('lin',0)):
+    oS=optStruct(mat(dataMatIn),mat(classLabels).transpose(),C,toler)
+    iter=0
+    entireSet=True;alphaPairsChange=0
+    while(iter<maxIter)and ((alphaPairsChange>0)or(entireSet)):
+        alphaPairsChange=0
+        if entireSet:
+            for i in range(oS.m):
+                alphaPairsChange+=innerL(i,oS)
+            print "fullSet,iter:%d i:%d,pairs changed %d"%(iter,i,alphaPairsChange)
+            iter+=1
+        else:
+            nonBoundIs=nonzero((oS.alphas.A>0)*(oS.alphas.A<C))[0]
+            for i in nonBoundIs:
+                alphaPairsChange+=innerL(i,oS)
+                print "non-bound,iter:%d i:%d,pairs changed %d"%(iter,i,alphaPairsChange)
+            iter+=1
+        if entireSet:entireSet=False
+        elif (alphaPairsChange==0):
+            entireSet=True
+        print "iteration number:%d"%iter
+    return oS.alphas,oS.b
+
+def kernelTrans(X,A,kTup):
+    m,n=shape(X)
+    K=mat(zeros((m,1)))
+    if kTup[0]=='lin':K=X*A.T
+    elif kTup[0]=='rbf':
+        for j in range(m):
+            deltaRow=X[j,:]-A
+            K[j]=deltaRow*deltaRow.T
+        K=exp(K/(-1*kTup[1]**2))
+    else:raise NameError('kernel is not recognized')
+    return K
+
