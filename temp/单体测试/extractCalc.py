@@ -3,14 +3,22 @@ import re
 class Discrible:
     def __init__(self,discStr=''):
         self.DisList=self.parseStr(discStr)
-        self.pattern=re.compile(u'^【?(((\d+(～\d+)?)|[ABCDEF])[bh]?)】?:?.*')
-
+        self.pattern=re.compile(u'^【?(((\d+(～\d+)?)|[ABCDEF])[bh]?)】?:?(.*)')
+        
     def parseStr(self,discStr):
         ret=[]
         if(discStr==''):return ret
         temp=discStr.strip().split('\n')
         for istr in temp:
-            pass
+            match=self.pattern.match(istr)
+            if(match):
+                tl=[match.group(1),match.group(5)]
+                ret.append(tl)
+            elif len(temp)==1:
+                tl=['',istr]
+                ret.append(tl)
+        return ret
+
 class Body:
     def __init__(self,startPos=0.0,bitLen=0,cmdStr='',disc=None):
         self.startPos=startPos
