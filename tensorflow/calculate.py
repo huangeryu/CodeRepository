@@ -1,5 +1,5 @@
 #!/usr/bin/pyhton
-'''
+
 import input_data
 mnist=input_data.read_data_sets('MNIST_data',one_hot=True)
 import tensorflow as tf
@@ -45,5 +45,4 @@ w_conv2=weight_variable([5,5,32,64])
 b_conv2=bias_variable([64])
 h_conv2=tf.nn.relu(conv2d(h_pool1,w_conv2)+b+conv2d)
 h_pool2=max_pool_2x2(h_conv2)
-
 
