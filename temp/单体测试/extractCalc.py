@@ -9,7 +9,6 @@ class Data:
     def calculateFcc(self):
         self.data[-1]=(sum(self.data)+self.parent.pFcc)%256
 
-
 class IDFrame:
     def __init__(self,unite):
         self.lec=0x0C
@@ -35,31 +34,31 @@ class IDFrame:
     def generateDataFrame(self,bodyList):
         ret=[]
         for body in bodyList:
-            if(not len(body.disc)):
+            if(not body.disc):
                 bodyData=self.__setDatabit(body,2**body.bitLen-1)
-                ret.append(bodyData)
+                ret.append(bodyData.data)
             else:
-                for m in body.disc:
+                for m in body.disc.DisList:
                     if(not len(m[0])):
                         bodyData=self.__setDatabit(body,2**body.bitLen-1)
-                        ret.append(bodyData)
+                        ret.append(bodyData.data)
                     else:
                         for num in range(m[0][0],m[0][1]):
                             bodyData=self.__setDatabit(body,num)
-                            ret.append(bodyData)
+                            ret.append(bodyData.data)
         return ret
 
 class Discrible:
+    __pattern=re.compile( u'^【?(((\d+)(～\d+)?)|[ABCDEF])([bh])?】?:?(.*)' )
     def __init__(self,discStr=''):
         self.DisList=self.parseStr(discStr)
-        self.__pattern=re.compile( u'^【?(((\d+)(～\d+)?)|[ABCDEF])([bh])?】?:?(.*)' )
-
+        
     def parseStr(self,discStr):
         ret=[]
         if(discStr==''):return ret
         temp=discStr.strip().split('\n')
         for istr in temp:
-            match=self.__pattern.match(istr)
+            match=Discrible.__pattern.match(istr)
             if(match):
                 base=match.group(5)
                 if(base=='b'):
@@ -108,19 +107,24 @@ def getDataInformation(fileName):
             index=int(currentIndex)#获取索引
             changed=True
         else:
-            changed=False;continue
-        cmdStr=table.cell(i,11)#获取データ名
-        if(cmdStr=='' or cmdStr==u'－' ):continue
+            changed=False
+        startPos=table.cell(i,8).value#获取开始位置
+        if(not changed and not isinstance(startPos,float) ):continue
         if(changed):
             informaFrame=Unite(index)
-            informaFrame.id=table.cell(i,6).value.strip()#获取id
+            tid=table.cell(i,6).value
+            if(isinstance(tid,float)):
+                tid=str(int(tid))
+            elif(isinstance(tid,str)):
+                tid=tid.strip()
+            informaFrame.id=tid#获取id
 #            if(len(informaFrame.id)!=3):print "id'len not equal 3!";exit()
             informaFrame.dlc=table.cell(i,7).value#获取DLC
             ret.append(informaFrame)
         else:
 #            if(not len(ret)):print "code logic error! exit()";exit()
-            body=Body(table.cell(i,8).value,table.cell(i,9).value,cmdStr)#获取开始位置，长度，描述
-            body.disc.append(Discrible(table.cell(i,25).value))
+            body=Body(table.cell(i,8).value,table.cell(i,9).value,table.cell(i,11).value)#获取开始位置，长度，描述
+            body.disc=Discrible(table.cell(i,25).value)
             ret[-1].bodyList.append(body)
     return ret
 
