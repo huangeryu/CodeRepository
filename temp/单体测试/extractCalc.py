@@ -26,7 +26,7 @@ class IDFrame:
         while(temp):
             tmod=temp%256
             if(i<0):print "fate error;exit()"
-            bodyData.data[i]=tmod
+            bodyData.data[i]|=tmod
             i-=1
             temp=temp//256
         bodyData.calculateFcc()
