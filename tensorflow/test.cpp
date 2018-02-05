@@ -1,5 +1,7 @@
 #include<iostream>
 #include "TestMode.h"
+#include<Python.h>
+
 int main()
 {
     TestMode* t=new TestMode();
