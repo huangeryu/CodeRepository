@@ -19,6 +19,7 @@ def deletefile(currentDir):
 
 def isELFFile(fileName):
     with open(fileName,'rb') as fr:
-        return tuple(bytearray(fr.read(4)))==(0x7f,0x45,0x4c,0x46)
+        first_4=bytearray(fr.read(4))
+        return tuple(first_4)==(0x7f,0x45,0x4c,0x46) or tuple(first_4)==(0xca,0xfe,0xba,0xbe)
 
 deletefile('./')
